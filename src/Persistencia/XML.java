@@ -87,6 +87,8 @@ public class XML {
 
             transformerFactory = TransformerFactory.newInstance();
             transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(javax.xml.transform.OutputKeys.INDENT, "yes"); // Activar sangría
+            //transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); // Espacios de sangría
             source = new DOMSource(doc);
             result = new StreamResult(new File(ruta));
             transformer.transform(source,result);

@@ -2,6 +2,7 @@ package DAO;
 
 import Logica.Entrenamiento;
 import Persistencia.XML;
+import Presentacion.Imprimir;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -68,12 +69,12 @@ public class EntrenamientoDAO {
 
             raiz.appendChild(nuevoEntrenamiento);
 
-            xml.escribir(doc);
+            xml.escribir(doc); // probar a escribir un solo elemento
         }catch (Exception e){
             System.err.println("Error " + e.getMessage());
         }
     }
-    public void actualizar(int id, Entrenamiento entrenamiento){
+    public boolean actualizar(int id, Entrenamiento entrenamiento){
         int contador = 0;
         boolean encontrar = false;
         XML xml = new XML("xml/entrenamientos.xml");
@@ -100,12 +101,17 @@ public class EntrenamientoDAO {
                 contador++;
             }while(contador < nodeList.getLength() && !encontrar);
 
-            xml.escribir(doc);
+            if(encontrar){
+                xml.escribir(doc);
+            }
+
+
         }catch (Exception e){
             System.err.println("Error " + e.getMessage());
         }
+        return encontrar;
     }
-    public void eliminar(int id){
+    public boolean eliminar(int id){
         int contador = 0;
         boolean encontrar = false;
         XML xml = new XML("xml/entrenamientos.xml");
@@ -129,9 +135,13 @@ public class EntrenamientoDAO {
                 }
                 contador++;
             }while(contador < nodeList.getLength() && !encontrar);
-            xml.escribir(doc);
+
+            if(encontrar){
+                xml.escribir(doc);
+            }
         }catch (Exception e){
             System.err.println("Error " + e.getMessage());
         }
+        return encontrar;
     }
 }

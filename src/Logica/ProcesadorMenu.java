@@ -5,7 +5,6 @@ import Presentacion.Imprimir;
 import Presentacion.Lector;
 import Presentacion.Menu;
 
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 public class ProcesadorMenu {
@@ -13,16 +12,17 @@ public class ProcesadorMenu {
         int opcion = Menu.menuOpciones();
         int id;
         int total;
-        ArrayList<Entrenamiento> lista = new ArrayList<Entrenamiento>();
+        boolean encontrar;
         EntrenamientoDAO entrenamientoDAO = new EntrenamientoDAO();
+        ListaEntrenamientos listaEntrenamientos = new ListaEntrenamientos();
         Entrenamiento entrenamiento = new Entrenamiento();
 
         try{
             switch(opcion){
                 case 1:
                     //leer
-                    lista = entrenamientoDAO.leerTodos();
-                    Imprimir.imprimir(lista);
+                    listaEntrenamientos = new ListaEntrenamientos(entrenamientoDAO.leerTodos());
+                    Imprimir.imprimir(listaEntrenamientos.getListaEntrenamientos());
                     break;
                 case 2:
                     //añadir
@@ -33,18 +33,30 @@ public class ProcesadorMenu {
                     //modificar
                     id = Lector.leerInt("Escribe el id a modificar");
                     Imprimir.imprimir("A continuación escribe el nuevo entrenamiento");
-                    entrenamiento = entrenamiento.constructorEntrenamientos();
-                    entrenamientoDAO.actualizar(id,entrenamiento);
+                    entrenamiento = entrenamiento.constructorEntrenamientos(id);
+                    encontrar = entrenamientoDAO.actualizar(id,entrenamiento);
+
+                    if(!encontrar){
+                        Imprimir.imprimir("El entrenamiento no se pudo modificar porque no existe el id: " + id);
+                    } else{
+                        Imprimir.imprimir("Entrenamiento modificado");
+                    }
                     break;
                 case 4:
                     //eliminar
                     id = Lector.leerInt("Escribe el id a eliminar");
-                    entrenamientoDAO.eliminar(id);
+                    encontrar = entrenamientoDAO.eliminar(id);
+
+                    if(!encontrar){
+                        Imprimir.imprimir("El entrenamiento no se pudo eliminar porque no existe el id: " + id);
+                    } else{
+                        Imprimir.imprimir("Entrenamiento eliminado");
+                    }
                     break;
                 case 5:
                     //operar
-                    lista = entrenamientoDAO.leerTodos();
-                    total = Consultas.operacion(lista);
+                    listaEntrenamientos = new ListaEntrenamientos(entrenamientoDAO.leerTodos());
+                    total = listaEntrenamientos.operacion();
                     Imprimir.imprimir("El total es: " + total);
                     break;
                 case 6:

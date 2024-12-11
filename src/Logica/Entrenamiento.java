@@ -82,4 +82,10 @@ public class Entrenamiento {
         nivel = Lector.leerString("Escribe el nivel");
         return new Entrenamiento(id,nombre,duracion,nivel);
     }
+    public Entrenamiento constructorEntrenamientos(int id){
+        nombre = Lector.leerString("Escribe el nombre");
+        duracion = Lector.leerInt("Escribe la duracion");
+        nivel = Lector.leerString("Escribe el nivel");
+        return new Entrenamiento(id,nombre,duracion,nivel);
+    }
 }
