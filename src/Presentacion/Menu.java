@@ -3,7 +3,7 @@ package Presentacion;
 import java.util.InputMismatchException;
 
 public class Menu {
-    public static int menuOpciones(){
+    public static int menuOpciones() throws InputMismatchException, IllegalArgumentException{
         int opcion = 0;
         boolean interruptor = false;
         try{
@@ -15,6 +15,7 @@ public class Menu {
                         "\n5.Calcular la duración total de los entrenamientos" +
                         "\n6.Estadísticas del xml" +
                         "\n7.Salir");
+
 
                 switch(opcion){
                     case 1:
@@ -51,15 +52,18 @@ public class Menu {
                         break;
                 }
 
+
             }while(!interruptor);
         }catch (InputMismatchException e){
-            System.err.println("Error al introducir el tipo de dato: " + e.getMessage());
+            System.err.println("Error producido en Menu al introducir el tipo de dato: " + e.getMessage());
+            throw e;
         }catch (IllegalArgumentException e) {
-            System.err.println("Has introducido mal los datos " + e.getMessage());
+            System.err.println("Error producido en Menu ya que has introducido mal los datos " + e.getMessage());
+            throw e;
 
-        }catch (Exception e) {
-            System.err.println("Error " + e.getMessage());
-
+        }catch (Exception e){
+            System.err.println("Error producido en Menu " + e.getMessage());
+            throw e;
         }
         return opcion;
     }

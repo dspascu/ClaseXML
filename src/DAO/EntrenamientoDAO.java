@@ -2,7 +2,6 @@ package DAO;
 
 import Logica.Entrenamiento;
 import Persistencia.XML;
-import Presentacion.Imprimir;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

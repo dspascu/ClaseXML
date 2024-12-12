@@ -8,8 +8,8 @@ import Presentacion.Menu;
 import java.util.InputMismatchException;
 
 public class ProcesadorMenu {
-    public static int gestionarMenu(){
-        int opcion = Menu.menuOpciones();
+    public static int gestionarMenu() throws IllegalArgumentException, InputMismatchException{
+        int opcion =0;
         int id;
         int total;
         boolean encontrar;
@@ -18,6 +18,7 @@ public class ProcesadorMenu {
         Entrenamiento entrenamiento = new Entrenamiento();
 
         try{
+            opcion = Menu.menuOpciones();
             switch(opcion){
                 case 1:
                     //leer
@@ -64,12 +65,15 @@ public class ProcesadorMenu {
                     break;
             }
         }catch (InputMismatchException e){
-            System.err.println("Error al introducir el tipo de dato: " + e.getMessage());
+            System.err.println("Error producido en ProcesadorMenu al introducir el tipo de dato: " + e.getMessage());
+            throw e;
         }catch (IllegalArgumentException e) {
-            System.err.println("Has introducido mal los datos " + e.getMessage());
+            System.err.println("Error producido en ProcesadorMenu ya que has introducido mal los datos " + e.getMessage());
+            throw e;
 
         }catch (Exception e) {
-            System.err.println("Error " + e.getMessage());
+            System.err.println("Error producido en ProcesadorMenu " + e.getMessage());
+            throw e;
 
         }
         return opcion;
