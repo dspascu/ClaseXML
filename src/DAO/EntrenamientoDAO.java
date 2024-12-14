@@ -1,6 +1,7 @@
 package DAO;
 
 import Logica.Entrenamiento;
+import Logica.ListaEntrenamientos;
 import Persistencia.XML;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -11,8 +12,8 @@ import java.util.ArrayList;
 
 public class EntrenamientoDAO {
 
-    public ArrayList<Entrenamiento> leerTodos(){
-        ArrayList<Entrenamiento> listaEntrenamientos = new ArrayList<Entrenamiento>();
+    public ListaEntrenamientos leerTodos(){
+        ListaEntrenamientos listaEntrenamientos = new ListaEntrenamientos();
         XML xml = new XML("xml/entrenamientos.xml");
         Document doc = null;
         NodeList nodeList = null;
@@ -25,7 +26,7 @@ public class EntrenamientoDAO {
             for(int i = 0; i < nodeList.getLength(); i++){
                 node = nodeList.item(i);
                 element = (Element) node;
-                listaEntrenamientos.add(new Entrenamiento(Integer.parseInt(element.getAttribute("id")),
+                listaEntrenamientos.getListaEntrenamientos().add(new Entrenamiento(Integer.parseInt(element.getAttribute("id")),
                         element.getElementsByTagName("nombre").item(0).getTextContent(),
                         Integer.parseInt(element.getElementsByTagName("duracion").item(0).getTextContent()),
                         element.getElementsByTagName("nivel").item(0).getTextContent()));
@@ -39,7 +40,7 @@ public class EntrenamientoDAO {
         return listaEntrenamientos;
     }
 
-    public void agregar(Entrenamiento entrenamiento){
+    public void agregar(ArrayList<Entrenamiento> listaEntrenamientos){
         XML xml = new XML("xml/entrenamientos.xml");
         Document doc = null;
         Element raiz = null;
@@ -47,33 +48,36 @@ public class EntrenamientoDAO {
         Element nombre,duracion,nivel;
 
         try{
-            doc = xml.leer();
-            raiz = doc.getDocumentElement();
+            doc = xml.archivo();
+            raiz = doc.createElement("entrenamientos");
+            doc.appendChild(raiz);
 
-            nuevoEntrenamiento = doc.createElement("entrenamiento");
-            nuevoEntrenamiento.setAttribute("id",String.valueOf(entrenamiento.getId()));
+            for(Entrenamiento e: listaEntrenamientos){
+                nuevoEntrenamiento = doc.createElement("entrenamiento");
+                nuevoEntrenamiento.setAttribute("id",String.valueOf(e.getId()));
+                nombre = doc.createElement("nombre");
+                nombre.setTextContent(e.getNombre());
+                duracion = doc.createElement("duracion");
+                duracion.setTextContent(String.valueOf(e.getDuracion()));
+                nivel = doc.createElement("nivel");
+                nivel.setTextContent(e.getNivel());
 
-            nombre = doc.createElement("nombre");
-            nombre.setTextContent(entrenamiento.getNombre());
+                nuevoEntrenamiento.appendChild(nombre);
+                nuevoEntrenamiento.appendChild(duracion);
+                nuevoEntrenamiento.appendChild(nivel);
 
-            duracion = doc.createElement("duracion");
-            duracion.setTextContent(String.valueOf(entrenamiento.getDuracion()));
+                raiz.appendChild(nuevoEntrenamiento);
 
-            nivel = doc.createElement("nivel");
-            nivel.setTextContent(entrenamiento.getNivel());
+            }
+            xml.escribir(doc,"yes");
 
-            nuevoEntrenamiento.appendChild(nombre);
-            nuevoEntrenamiento.appendChild(duracion);
-            nuevoEntrenamiento.appendChild(nivel);
-
-            raiz.appendChild(nuevoEntrenamiento);
-
-            xml.escribir(doc); // probar a escribir un solo elemento
         }catch (Exception e){
             System.err.println("Error " + e.getMessage());
         }
+
     }
-    public boolean actualizar(int id, Entrenamiento entrenamiento){
+
+    public void actualizar(int id, Entrenamiento entrenamiento){
         int contador = 0;
         boolean encontrar = false;
         XML xml = new XML("xml/entrenamientos.xml");
@@ -100,17 +104,13 @@ public class EntrenamientoDAO {
                 contador++;
             }while(contador < nodeList.getLength() && !encontrar);
 
-            if(encontrar){
-                xml.escribir(doc);
-            }
-
+            xml.escribir(doc,"no");
 
         }catch (Exception e){
             System.err.println("Error " + e.getMessage());
         }
-        return encontrar;
     }
-    public boolean eliminar(int id){
+    public void eliminar(int id){
         int contador = 0;
         boolean encontrar = false;
         XML xml = new XML("xml/entrenamientos.xml");
@@ -136,11 +136,10 @@ public class EntrenamientoDAO {
             }while(contador < nodeList.getLength() && !encontrar);
 
             if(encontrar){
-                xml.escribir(doc);
+                xml.escribir(doc,"no");
             }
         }catch (Exception e){
             System.err.println("Error " + e.getMessage());
         }
-        return encontrar;
     }
 }

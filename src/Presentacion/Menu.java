@@ -4,7 +4,7 @@ import java.util.InputMismatchException;
 
 public class Menu {
     public static int menuOpciones() throws InputMismatchException, IllegalArgumentException{
-        int opcion = 0;
+        int opcion=0;
         boolean interruptor = false;
         try{
             do{
@@ -14,7 +14,8 @@ public class Menu {
                         "\n4.Eliminar etiqueta xml" +
                         "\n5.Calcular la duración total de los entrenamientos" +
                         "\n6.Estadísticas del xml" +
-                        "\n7.Salir");
+                        "\n7.Buscador" +
+                        "\n8.Salir");
 
 
                 switch(opcion){
@@ -47,6 +48,10 @@ public class Menu {
                         interruptor = true;
                         break;
                     case 7:
+                        Imprimir.imprimir("Buscador por subcadena...");
+                        interruptor = true;
+                        break;
+                    case 8:
                         Imprimir.imprimir("Saliendo...");
                         interruptor = true;
                         break;

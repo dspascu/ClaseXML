@@ -1,7 +1,9 @@
 package Logica;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ListaEntrenamientos {
     private ArrayList<Entrenamiento> listaEntrenamientos;
@@ -55,4 +57,26 @@ public class ListaEntrenamientos {
 
         return sumatorio;
     }
+
+    public boolean comprobarID(int id){
+        boolean encontrar = false;
+        int contador =0;
+        do{
+            if(listaEntrenamientos.get(contador).getId() == id){
+                encontrar = true;
+            }
+            contador++;
+        }while(contador < listaEntrenamientos.size() && !encontrar);
+        return encontrar;
+    }
+
+    public ArrayList<Entrenamiento> buscador(String subcadena){
+        List<Entrenamiento> listaBuscador = new ArrayList<Entrenamiento>();
+        listaBuscador = listaEntrenamientos.stream()
+                .filter(e ->e.getNombre().contains(subcadena) || e.getNivel().contains(subcadena))
+                .collect(Collectors.toList());
+        return new ArrayList<>(listaBuscador);
+
+    }
+
 }

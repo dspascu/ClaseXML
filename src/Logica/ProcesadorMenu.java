@@ -5,63 +5,75 @@ import Presentacion.Imprimir;
 import Presentacion.Lector;
 import Presentacion.Menu;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 public class ProcesadorMenu {
     public static int gestionarMenu() throws IllegalArgumentException, InputMismatchException{
-        int opcion =0;
+        int opcion;
         int id;
         int total;
-        boolean encontrar;
+        String subcadena;
+        ArrayList<Entrenamiento> filtroEntrenamientos = new ArrayList<Entrenamiento>();
         EntrenamientoDAO entrenamientoDAO = new EntrenamientoDAO();
-        ListaEntrenamientos listaEntrenamientos = new ListaEntrenamientos();
         Entrenamiento entrenamiento = new Entrenamiento();
+        ListaEntrenamientos listaEntrenamientos = entrenamientoDAO.leerTodos();
 
         try{
             opcion = Menu.menuOpciones();
+
             switch(opcion){
                 case 1:
                     //leer
-                    listaEntrenamientos = new ListaEntrenamientos(entrenamientoDAO.leerTodos());
                     Imprimir.imprimir(listaEntrenamientos.getListaEntrenamientos());
                     break;
                 case 2:
                     //añadir
-                    entrenamiento = entrenamiento.constructorEntrenamientos();
-                    entrenamientoDAO.agregar(entrenamiento);
+                    id = Lector.leerInt("Escribe el id a añadir");
+                    if(listaEntrenamientos.comprobarID(id)){
+                        Imprimir.imprimir("No se pudo añadir porque el ya existe el id: " + id);
+                    }else{
+                        entrenamiento = entrenamiento.constructorEntrenamientos(id);
+                        listaEntrenamientos.getListaEntrenamientos().add(entrenamiento);
+                        entrenamientoDAO.agregar(listaEntrenamientos.getListaEntrenamientos());
+                        Imprimir.imprimir("Entrenamiento añadido");
+                    }
+
                     break;
                 case 3:
                     //modificar
                     id = Lector.leerInt("Escribe el id a modificar");
-                    Imprimir.imprimir("A continuación escribe el nuevo entrenamiento");
-                    entrenamiento = entrenamiento.constructorEntrenamientos(id);
-                    encontrar = entrenamientoDAO.actualizar(id,entrenamiento);
-
-                    if(!encontrar){
-                        Imprimir.imprimir("El entrenamiento no se pudo modificar porque no existe el id: " + id);
-                    } else{
+                    if(listaEntrenamientos.comprobarID(id)){
+                        Imprimir.imprimir("A continuación escribe el nuevo entrenamiento");
+                        entrenamiento = entrenamiento.constructorEntrenamientos(id);
+                        entrenamientoDAO.actualizar(id,entrenamiento);
                         Imprimir.imprimir("Entrenamiento modificado");
+                    }else{
+                        Imprimir.imprimir("El entrenamiento no se pudo modificar porque no existe el id: " + id);
                     }
                     break;
                 case 4:
                     //eliminar
                     id = Lector.leerInt("Escribe el id a eliminar");
-                    encontrar = entrenamientoDAO.eliminar(id);
-
-                    if(!encontrar){
-                        Imprimir.imprimir("El entrenamiento no se pudo eliminar porque no existe el id: " + id);
-                    } else{
+                    if(listaEntrenamientos.comprobarID(id)){
+                        entrenamientoDAO.eliminar(id);
                         Imprimir.imprimir("Entrenamiento eliminado");
+                    }else{
+                        Imprimir.imprimir("El entrenamiento no se pudo eliminar porque no existe el id: " + id);
                     }
                     break;
                 case 5:
                     //operar
-                    listaEntrenamientos = new ListaEntrenamientos(entrenamientoDAO.leerTodos());
                     total = listaEntrenamientos.operacion();
                     Imprimir.imprimir("El total es: " + total);
                     break;
                 case 6:
                     //estadisticas
+                    break;
+                case 7:
+                    subcadena = Lector.leerString("Introduce la subcadena");
+                    filtroEntrenamientos = listaEntrenamientos.buscador(subcadena);
+                    Imprimir.imprimir(filtroEntrenamientos);
                     break;
             }
         }catch (InputMismatchException e){
