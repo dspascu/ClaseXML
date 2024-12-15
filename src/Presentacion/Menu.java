@@ -15,7 +15,8 @@ public class Menu {
                         "\n5.Calcular la duración total de los entrenamientos" +
                         "\n6.Estadísticas del xml" +
                         "\n7.Buscador" +
-                        "\n8.Salir");
+                        "\n8.Formatear xml" +
+                        "\n9.Salir");
 
 
                 switch(opcion){
@@ -52,6 +53,10 @@ public class Menu {
                         interruptor = true;
                         break;
                     case 8:
+                        Imprimir.imprimir("Formatenado xml...");
+                        interruptor = true;
+                        break;
+                    case 9:
                         Imprimir.imprimir("Saliendo...");
                         interruptor = true;
                         break;

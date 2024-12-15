@@ -13,6 +13,7 @@ public class ProcesadorMenu {
         int opcion;
         int id;
         int total;
+        int totalNodos, niveles, nodos1, nodos2, nodos3;
         String subcadena;
         ArrayList<Entrenamiento> filtroEntrenamientos = new ArrayList<Entrenamiento>();
         EntrenamientoDAO entrenamientoDAO = new EntrenamientoDAO();
@@ -34,8 +35,7 @@ public class ProcesadorMenu {
                         Imprimir.imprimir("No se pudo añadir porque el ya existe el id: " + id);
                     }else{
                         entrenamiento = entrenamiento.constructorEntrenamientos(id);
-                        listaEntrenamientos.getListaEntrenamientos().add(entrenamiento);
-                        entrenamientoDAO.agregar(listaEntrenamientos.getListaEntrenamientos());
+                        entrenamientoDAO.agregar(entrenamiento);
                         Imprimir.imprimir("Entrenamiento añadido");
                     }
 
@@ -69,11 +69,21 @@ public class ProcesadorMenu {
                     break;
                 case 6:
                     //estadisticas
+                    niveles = listaEntrenamientos.niveles();
+                    nodos1 = 1; //porque solo hay un unico nodo raiz
+                    nodos2 = listaEntrenamientos.nodosSegundoNivel();
+                    nodos3 = listaEntrenamientos.nodosTercerNivel();
+                    totalNodos = listaEntrenamientos.totalNodos(nodos1,nodos2,nodos3);
+
+                    Imprimir.imprimirEstadisticas(totalNodos,niveles,nodos1,nodos2,nodos3);
                     break;
                 case 7:
                     subcadena = Lector.leerString("Introduce la subcadena");
                     filtroEntrenamientos = listaEntrenamientos.buscador(subcadena);
                     Imprimir.imprimir(filtroEntrenamientos);
+                    break;
+                case 8:
+                    entrenamientoDAO.formatear(listaEntrenamientos.getListaEntrenamientos());
                     break;
             }
         }catch (InputMismatchException e){

@@ -51,8 +51,10 @@ public class ListaEntrenamientos {
                 sumatorio += listaEntrenamientos.get(i).getDuracion();
             }
 
-        }catch (Exception e){
-            System.err.println("Error: " + e.getMessage());
+        }catch(NullPointerException e){
+            System.err.println("Hay valores nulos en la lista " + e.getMessage());
+        }catch(Exception e){
+            System.err.println("Error " + e.getMessage());
         }
 
         return sumatorio;
@@ -61,22 +63,92 @@ public class ListaEntrenamientos {
     public boolean comprobarID(int id){
         boolean encontrar = false;
         int contador =0;
-        do{
-            if(listaEntrenamientos.get(contador).getId() == id){
-                encontrar = true;
-            }
-            contador++;
-        }while(contador < listaEntrenamientos.size() && !encontrar);
+        try{
+            do{
+                if(listaEntrenamientos.get(contador).getId() == id){
+                    encontrar = true;
+                }
+                contador++;
+            }while(contador < listaEntrenamientos.size() && !encontrar);
+
+        }catch(NullPointerException e){
+            System.err.println("Hay valores nulos en la lista " + e.getMessage());
+        }catch(Exception e){
+            System.err.println("Error " + e.getMessage());
+        }
         return encontrar;
     }
 
     public ArrayList<Entrenamiento> buscador(String subcadena){
         List<Entrenamiento> listaBuscador = new ArrayList<Entrenamiento>();
-        listaBuscador = listaEntrenamientos.stream()
-                .filter(e ->e.getNombre().contains(subcadena) || e.getNivel().contains(subcadena))
-                .collect(Collectors.toList());
+        try {
+            listaBuscador = listaEntrenamientos.stream()
+                    .filter(e -> e.getNombre().contains(subcadena) || e.getNivel().contains(subcadena))
+                    .collect(Collectors.toList());
+        } catch(NullPointerException e){
+            System.err.println("Hay valores nulos en la lista " + e.getMessage());
+        }catch (Exception e){
+            System.err.println("Error " + e.getMessage());
+        }
+
         return new ArrayList<>(listaBuscador);
 
+    }
+
+    public int nodosSegundoNivel(){
+        return listaEntrenamientos.size();
+    }
+
+    public int nodosTercerNivel(){
+        int contador=0;
+
+        try{
+            for(Entrenamiento entrenamiento : listaEntrenamientos){
+                if(entrenamiento.getNombre()!=null){
+                    contador++;
+                }
+                if(entrenamiento.getNivel()!= null){
+                    contador++;
+                }
+                if(entrenamiento.getDuracion() > 0){
+                    contador++;
+                }
+            }
+        } catch(NullPointerException e){
+            System.err.println("Hay valores nulos en la lista " + e.getMessage());
+        }catch (Exception e){
+            System.err.println("Error " + e.getMessage());
+        }
+        return contador;
+    }
+
+    public int totalNodos(int nodosPrimerNivel,int nodosSegundoNivel,int nodosTercerNivel){
+        return nodosPrimerNivel + nodosSegundoNivel + nodosTercerNivel;
+    }
+    public int niveles(){
+        int contadorNiveles =1;
+        int contador = 0;
+        boolean encontrar = false;
+        try{
+            if(listaEntrenamientos!=null){
+                contadorNiveles++;
+
+                do{
+                    if(listaEntrenamientos.get(contador)!= null){
+                        contadorNiveles++;
+                        encontrar = true;
+                    }
+                    contador++;
+
+                }while(contador < listaEntrenamientos.size() && !encontrar);
+            }
+        } catch(NullPointerException e){
+            System.err.println("Hay valores nulos en la lista " + e.getMessage());
+        }catch (Exception e){
+            System.err.println("Error " + e.getMessage());
+        }
+
+        return contadorNiveles;
     }
 
 }

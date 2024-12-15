@@ -40,7 +40,7 @@ public class EntrenamientoDAO {
         return listaEntrenamientos;
     }
 
-    public void agregar(ArrayList<Entrenamiento> listaEntrenamientos){
+    public void formatear(ArrayList<Entrenamiento> listaEntrenamientos){
         XML xml = new XML("xml/entrenamientos.xml");
         Document doc = null;
         Element raiz = null;
@@ -75,6 +75,40 @@ public class EntrenamientoDAO {
             System.err.println("Error " + e.getMessage());
         }
 
+    }
+    public void agregar(Entrenamiento entrenamiento){
+        XML xml = new XML("xml/entrenamientos.xml");
+        Document doc = null;
+        Element raiz = null;
+        Element nuevoEntrenamiento = null;
+        Element nombre,duracion,nivel;
+
+        try{
+            doc = xml.leer();
+            raiz = doc.getDocumentElement();
+
+            nuevoEntrenamiento = doc.createElement("entrenamiento");
+            nuevoEntrenamiento.setAttribute("id",String.valueOf(entrenamiento.getId()));
+
+            nombre = doc.createElement("nombre");
+            nombre.setTextContent(entrenamiento.getNombre());
+
+            duracion = doc.createElement("duracion");
+            duracion.setTextContent(String.valueOf(entrenamiento.getDuracion()));
+
+            nivel = doc.createElement("nivel");
+            nivel.setTextContent(entrenamiento.getNivel());
+
+            nuevoEntrenamiento.appendChild(nombre);
+            nuevoEntrenamiento.appendChild(duracion);
+            nuevoEntrenamiento.appendChild(nivel);
+
+            raiz.appendChild(nuevoEntrenamiento);
+
+            xml.escribir(doc,"no");
+        }catch (Exception e){
+            System.err.println("Error " + e.getMessage());
+        }
     }
 
     public void actualizar(int id, Entrenamiento entrenamiento){
@@ -142,4 +176,5 @@ public class EntrenamientoDAO {
             System.err.println("Error " + e.getMessage());
         }
     }
+
 }

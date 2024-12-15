@@ -76,9 +76,14 @@ public class Entrenamiento {
     }
 
     public Entrenamiento constructorEntrenamientos(int id){
-        nombre = Lector.leerString("Escribe el nombre");
-        duracion = Lector.leerInt("Escribe la duracion");
-        nivel = Lector.leerString("Escribe el nivel");
+        try{
+            nombre = Lector.leerString("Escribe el nombre");
+            duracion = Lector.leerInt("Escribe la duracion");
+            nivel = Lector.leerString("Escribe el nivel");
+        }catch(Exception e){
+            System.err.println("Error " + e.getMessage());
+        }
+
         return new Entrenamiento(id,nombre,duracion,nivel);
     }
 }
