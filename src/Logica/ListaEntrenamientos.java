@@ -26,7 +26,7 @@ public class ListaEntrenamientos {
     @Override
     public String toString() {
         return "ListaEntrenamientos{" +
-                "listaEntrenamientos=" + listaEntrenamientos +
+                "\n" + listaEntrenamientos +
                 '}';
     }
 
@@ -43,6 +43,7 @@ public class ListaEntrenamientos {
         return Objects.hash(listaEntrenamientos);
     }
 
+    //metodo para calcular la suma de la duracion total de los entrenamientos
     public int operacion(){
         int sumatorio = 0;
         try{
@@ -60,6 +61,7 @@ public class ListaEntrenamientos {
         return sumatorio;
     }
 
+    //metodo para comprobar id a la hora de añadir, modificar y eliminar
     public boolean comprobarID(int id){
         boolean encontrar = false;
         int contador =0;
@@ -79,6 +81,7 @@ public class ListaEntrenamientos {
         return encontrar;
     }
 
+    //metodo que filtra la lista en funcion de la subcadena y devuelve un ArrayList con las coincidencias
     public ArrayList<Entrenamiento> buscador(String subcadena){
         List<Entrenamiento> listaBuscador = new ArrayList<Entrenamiento>();
         try {
@@ -95,22 +98,24 @@ public class ListaEntrenamientos {
 
     }
 
+    //obtener los nodos del segundo nivel
     public int nodosSegundoNivel(){
         return listaEntrenamientos.size();
     }
 
+    //obtener los nodos del tercer nivel
     public int nodosTercerNivel(){
         int contador=0;
 
         try{
-            for(Entrenamiento entrenamiento : listaEntrenamientos){
-                if(entrenamiento.getNombre()!=null){
+            for(Entrenamiento entrenamiento : listaEntrenamientos){ // cuenta cada etiqueta duracion,nivel y nombre
+                if(!entrenamiento.getNombre().isEmpty()){
                     contador++;
                 }
-                if(entrenamiento.getNivel()!= null){
+                if(!entrenamiento.getNivel().isEmpty()){
                     contador++;
                 }
-                if(entrenamiento.getDuracion() > 0){
+                if(entrenamiento.getDuracion() >= 0){
                     contador++;
                 }
             }
@@ -122,19 +127,22 @@ public class ListaEntrenamientos {
         return contador;
     }
 
+    //suma total de nodos
     public int totalNodos(int nodosPrimerNivel,int nodosSegundoNivel,int nodosTercerNivel){
         return nodosPrimerNivel + nodosSegundoNivel + nodosTercerNivel;
     }
+
+    //metodo para obtener los niveles
     public int niveles(){
-        int contadorNiveles =1;
+        int contadorNiveles =1; // nivel raiz
         int contador = 0;
         boolean encontrar = false;
         try{
-            if(listaEntrenamientos!=null){
+            if(!listaEntrenamientos.isEmpty()){ // segundo nivel
                 contadorNiveles++;
 
                 do{
-                    if(listaEntrenamientos.get(contador)!= null){
+                    if(listaEntrenamientos.get(contador)!= null){ //tercer nivel
                         contadorNiveles++;
                         encontrar = true;
                     }

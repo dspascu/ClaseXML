@@ -51,9 +51,10 @@ public class XML {
         return Objects.hash(ruta);
     }
 
+    //metodo que devuelve un objeto Document y que crea un xml vacio
     public Document archivo(){
-        DocumentBuilderFactory factory = null;
-        DocumentBuilder builder = null;
+        DocumentBuilderFactory factory; //proporciona una forma de crear instancias de DocumentBuilder
+        DocumentBuilder builder; //construye el objeto Document
         Document doc = null;
         try{
             factory = DocumentBuilderFactory.newInstance();
@@ -66,17 +67,18 @@ public class XML {
         return doc;
     }
 
+    //metodo que devuelve un objeto Document y se encarga de leer el contenido del xml
     public Document leer(){
-        File file = null;
-        DocumentBuilderFactory factory = null;
-        DocumentBuilder builder = null;
+        File file;
+        DocumentBuilderFactory factory; //proporciona una forma de crear instancias de DocumentBuilder
+        DocumentBuilder builder; //construye el objeto Document
         Document doc = null;
 
         try{
             file = new File(ruta);
             factory = DocumentBuilderFactory.newInstance();
             builder = factory.newDocumentBuilder();
-            doc = builder.parse(file);
+            doc = builder.parse(file); // para manipular el xml
 
         } catch (ParserConfigurationException e) {
             System.err.println("Error con la configuración del DocumentBuilderFactory o al crear el DocumentBuilder " + e.getMessage());
@@ -88,19 +90,20 @@ public class XML {
         return doc;
     }
 
-    public void escribir(Document doc, String activo){
-        TransformerFactory transformerFactory = null;
-        Transformer transformer = null;
-        DOMSource source = null;
-        StreamResult result = null;
+    //metodo para escribir xml utilizando el Document que proviene del metodo leer o del metodo archivo
+    public void escribir(Document doc, String tabulacion){
+        TransformerFactory transformerFactory;
+        Transformer transformer; // se usa para convertir un Document en un archivo xml
+        DOMSource source; //modelo estandar para representar documentos xml como estructura de arbol en memoria
+        StreamResult result;
 
         try{
 
             transformerFactory = TransformerFactory.newInstance();
             transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, activo);
+            transformer.setOutputProperty(OutputKeys.INDENT, tabulacion); //para que dar formato al xml, se activa o desactiva
             source = new DOMSource(doc);
-            result = new StreamResult(new File(ruta));
+            result = new StreamResult(new File(ruta)); //destino de la escritura
             transformer.transform(source,result);
 
         } catch (TransformerConfigurationException e) {
@@ -109,4 +112,27 @@ public class XML {
             System.err.println("Error con la fuente DOMSource o con el destino StreamResult " + e.getMessage());
         }
     }
+
+    //metodo para escribir xml utilizando el Document que proviene del metodo leer
+    public void escribirXML(Document doc, String destino){
+        TransformerFactory transformerFactory;
+        Transformer transformer; // se usa para convertir un Document en un archivo xml
+        DOMSource source; //modelo estandar para representar documentos xml como estructura de arbol en memoria
+        StreamResult result;
+
+        try{
+
+            transformerFactory = TransformerFactory.newInstance();
+            transformer = transformerFactory.newTransformer();
+            source = new DOMSource(doc);
+            result = new StreamResult(new File(destino)); //destino de la escritura
+            transformer.transform(source,result);
+
+        } catch (TransformerConfigurationException e) {
+            System.err.println("Error con la configuracion del Transformer " + e.getMessage());
+        } catch (TransformerException e) {
+            System.err.println("Error con la fuente DOMSource o con el destino StreamResult " + e.getMessage());
+        }
+    }
+
 }

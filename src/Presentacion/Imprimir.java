@@ -1,6 +1,7 @@
 package Presentacion;
 
 import Logica.Entrenamiento;
+import Logica.ListaEntrenamientos;
 
 import java.util.ArrayList;
 
@@ -9,6 +10,9 @@ public class Imprimir {
         System.out.println(imprime);
     }
     public static void imprimir(ArrayList<Entrenamiento> listaEntrenamientos){
+        System.out.println(listaEntrenamientos);
+    }
+    public static void imprimir(ListaEntrenamientos listaEntrenamientos){
         System.out.println(listaEntrenamientos);
     }
     public static void imprimir(String imprime, int numero){

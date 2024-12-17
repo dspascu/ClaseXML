@@ -1,6 +1,7 @@
 package Logica;
 
 import DAO.EntrenamientoDAO;
+import DAO.ExportarXML;
 import Presentacion.Imprimir;
 import Presentacion.Lector;
 import Presentacion.Menu;
@@ -16,6 +17,7 @@ public class ProcesadorMenu {
         int totalNodos, niveles, nodos1, nodos2, nodos3;
         String subcadena;
         ArrayList<Entrenamiento> filtroEntrenamientos = new ArrayList<Entrenamiento>();
+        ExportarXML exportarXML = new ExportarXML();
         EntrenamientoDAO entrenamientoDAO = new EntrenamientoDAO();
         Entrenamiento entrenamiento = new Entrenamiento();
         ListaEntrenamientos listaEntrenamientos = entrenamientoDAO.leerTodos();
@@ -26,7 +28,7 @@ public class ProcesadorMenu {
             switch(opcion){
                 case 1:
                     //leer
-                    Imprimir.imprimir(listaEntrenamientos.getListaEntrenamientos());
+                    Imprimir.imprimir(listaEntrenamientos);
                     break;
                 case 2:
                     //añadir
@@ -78,13 +80,22 @@ public class ProcesadorMenu {
                     Imprimir.imprimirEstadisticas(totalNodos,niveles,nodos1,nodos2,nodos3);
                     break;
                 case 7:
+                    //buscador
                     subcadena = Lector.leerString("Introduce la subcadena");
                     filtroEntrenamientos = listaEntrenamientos.buscador(subcadena);
                     Imprimir.imprimir(filtroEntrenamientos);
                     break;
                 case 8:
+                    //escribir xml con un formato tabulado
                     entrenamientoDAO.formatear(listaEntrenamientos.getListaEntrenamientos());
+                    Imprimir.imprimir("Xml formateado");
                     break;
+                case 9:
+                    //exportar xml
+                    exportarXML.exportar();
+                    Imprimir.imprimir("Xml exportado");
+                    break;
+
             }
         }catch (InputMismatchException e){
             System.err.println("Error producido en ProcesadorMenu al introducir el tipo de dato: " + e.getMessage());

@@ -3,8 +3,9 @@ package Presentacion;
 import java.util.InputMismatchException;
 
 public class Menu {
+    //menu de opciones donde el usuario elige la operacion a realizar y la envia a ProcesadorMenu
     public static int menuOpciones() throws InputMismatchException, IllegalArgumentException{
-        int opcion=0;
+        int opcion;
         boolean interruptor = false;
         try{
             do{
@@ -16,7 +17,8 @@ public class Menu {
                         "\n6.Estadísticas del xml" +
                         "\n7.Buscador" +
                         "\n8.Formatear xml" +
-                        "\n9.Salir");
+                        "\n9.Exportar xml" +
+                        "\n10.Salir");
 
 
                 switch(opcion){
@@ -57,6 +59,10 @@ public class Menu {
                         interruptor = true;
                         break;
                     case 9:
+                        Imprimir.imprimir("Exportando xml...");
+                        interruptor = true;
+                        break;
+                    case 10:
                         Imprimir.imprimir("Saliendo...");
                         interruptor = true;
                         break;

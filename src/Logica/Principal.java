@@ -9,7 +9,7 @@ public class Principal {
         try{
             do{
                 numero = ProcesadorMenu.gestionarMenu();
-            }while(numero != 9);
+            }while(numero != 10);
 
         }catch (IllegalArgumentException e){
             System.err.println("Error en Principal debido a que has introducido mal los datos " + e.getMessage());

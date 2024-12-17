@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/styles.css">
+    <title>Tabla de entrenamientos</title>
+</head>
+
+<body>
+    <h2>ENTRENAMIENTOS</h2>
+    <form id="formulario">
+        <div id="contenido"></div>
+    </form>
+
+    <script type="text/javascript" language="javascript">
+        var http_request = false;
+        var contenido = document.getElementById("contenido");
+
+        function makeRequest(url) {
+
+            http_request = false;
+
+            if (window.XMLHttpRequest) { // Mozilla, Safari,...
+                http_request = new XMLHttpRequest();
+                if (http_request.overrideMimeType) {
+                    http_request.overrideMimeType('text/xml');
+                    console.info("entra");
+                }
+            } else if (window.ActiveXObject) { // IE
+                try {
+                    http_request = new ActiveXObject("Msxml2.XMLHTTP");
+                } catch (e) {
+                    try {
+                        http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                    } catch (e) { }
+                }
+            }
+
+            if (!http_request) {
+                alert('Falla :( No es posible crear una instancia XMLHTTP');
+                return false;
+            }
+            http_request.onreadystatechange = alertContents;
+            http_request.open('GET', url, true);
+            http_request.send();
+
+        }
+
+        function alertContents() {
+
+            if (http_request.readyState == 4) {
+                if (http_request.status == 200) {
+                    muestraXML();
+                } else {
+                    alert(http_request.status);
+                    alert('Hubo problemas con la petición.');
+                }
+            }
+
+        }
+
+        function muestraXML() {
+
+            var entrenamientos, entrenamiento, id, nombre, duracion, nivel;
+
+
+            entrenamientos = "<table border='1'><tr><th>ID</th><th>NOMBRE</th><th>DURACION</th><th>NIVEL</th></tr>";
+            entrenamiento = http_request.responseXML.documentElement.getElementsByTagName("entrenamiento");
+            for (let i = 0; i < entrenamiento.length; i++) {
+                entrenamientos = entrenamientos + "<tr>";
+                id = entrenamiento[i].getAttribute("id"); {
+                    try {
+                        entrenamientos = entrenamientos + "<td>" + id + "</td>";
+                    } catch (er) {
+                        entrenamientos = entrenamientos + "<td>Sin id</td>";
+                    }
+                }
+                nombre = entrenamiento[i].getElementsByTagName("nombre"); {
+                    try {
+                        entrenamientos = entrenamientos + "<td>" + nombre[0].firstChild.nodeValue + "</td>";
+                    } catch (er) {
+                        entrenamientos = entrenamientos + "<td>Sin nombre</td>";
+                    }
+                }
+                duracion = entrenamiento[i].getElementsByTagName("duracion"); {
+                    try {
+                        entrenamientos = entrenamientos + "<td>" + duracion[0].firstChild.nodeValue + "</td>";
+                    } catch (er) {
+                        entrenamientos = entrenamientos + "<td>Sin duración</td>";
+                    }
+                }
+                nivel = entrenamiento[i].getElementsByTagName("nivel"); {
+                    try {
+                        entrenamientos = entrenamientos + "<td>" + nivel[0].firstChild.nodeValue + "</td>";
+                    } catch (er) {
+                        entrenamientos = entrenamientos + "<td>Sin nivel</td>";
+                    }
+                }
+                entrenamientos = entrenamientos + "</tr>";
+            }
+            entrenamientos = entrenamientos + "</table>";
+            document.getElementById('contenido').innerHTML = entrenamientos;
+        }
+    </script>
+    <span onclick="makeRequest('http://localhost/dashboard/ajax/datos/entrenamientos.xml')">
+        Hacer una petición
+    </span>
+
+</body>
+
+</html>
